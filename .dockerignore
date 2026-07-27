@@ -1,0 +1,12 @@
+.git
+.gitignore
+node_modules
+tests
+bootstrap/cache
+storage/logs
+storage/framework/cache
+storage/framework/sessions
+storage/framework/views
+Dockerfile
+.dockerignore
+docker-compose.yml

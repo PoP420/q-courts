@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCourts Pickleball — Book a Court in Makilala</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{
+    --court-navy:#0A3A52;
+    --court-navy-deep:#062737;
+    --kitchen-white:#FAF7EF;
+    --ball-yellow:#D9F04B;
+    --net-black:#12201F;
+    --line-coral:#FF5C4D;
+    --dink-green:#3FA66B;
+    --line-white:#EFF3EC;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--kitchen-white);
+    color:var(--net-black);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+  }
+  .font-display{font-family:'Space Grotesk',sans-serif;}
+  .font-mono{font-family:'Space Mono',monospace;}
+
+  /* Court line texture */
+  .court-lines{
+    background-image:
+      linear-gradient(var(--line-white) 2px, transparent 2px),
+      linear-gradient(90deg, var(--line-white) 2px, transparent 2px);
+    background-size: 100% 100%, 100% 100%;
+  }
+
+  .hero-bg{
+    background: radial-gradient(circle at 20% 20%, rgba(217,240,75,0.08), transparent 45%),
+                linear-gradient(180deg, var(--court-navy) 0%, var(--court-navy-deep) 100%);
+    position:relative;
+  }
+  .hero-bg::before{
+    content:'';
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(239,243,236,0.14) 1.5px, transparent 1.5px),
+      linear-gradient(90deg, rgba(239,243,236,0.14) 1.5px, transparent 1.5px);
+    background-size: 100% 33.33%, 25% 100%;
+    background-position: 0 0;
+    pointer-events:none;
+    opacity:0.6;
+  }
+  .kitchen-line{
+    position:absolute;
+    left:0; right:0;
+    height:2px;
+    background:rgba(239,243,236,0.35);
+  }
+
+  /* Stamp badge */
+  .stamp{
+    border:3px solid var(--ball-yellow);
+    color:var(--ball-yellow);
+    border-radius:9999px;
+    transform: rotate(-9deg);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    letter-spacing:0.14em;
+  }
+
+  .paddle-underline{
+    position:relative;
+    display:inline-block;
+  }
+  .paddle-underline::after{
+    content:'';
+    position:absolute;
+    left:0; right:0; bottom:-0.08em;
+    height:0.16em;
+    background:var(--line-coral);
+    border-radius:2px;
+  }
+
+  .card-line{
+    border:1.5px solid rgba(18,32,31,0.12);
+  }
+
+  .btn-primary{
+    background:var(--line-coral);
+    color:var(--kitchen-white);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn-primary:hover{ transform: translateY(-2px); box-shadow: 0 10px 24px -8px rgba(255,92,77,0.55); }
+
+  .btn-outline{
+    border:2px solid var(--net-black);
+    color:var(--net-black);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .btn-outline:hover{ background:var(--net-black); color:var(--kitchen-white); }
+
+  .in-badge{
+    background:var(--dink-green);
+    color:var(--kitchen-white);
+  }
+
+  .field{
+    width:100%;
+    border-radius:0.75rem;
+    padding:0.875rem 1.25rem;
+    font-family:'Space Mono',monospace;
+    font-size:0.875rem;
+    background:var(--kitchen-white);
+    color:var(--net-black);
+  }
+  .field::placeholder{ color:rgba(18,32,31,0.4); }
+  .field:focus{ outline:3px solid var(--line-coral); outline-offset:1px; }
+
+  @media (prefers-reduced-motion: no-preference){
+    .float{ animation: floaty 6s ease-in-out infinite; }
+    @keyframes floaty{
+       0%,100%{ transform: translateY(0) rotate(-9deg); }
+       50%{ transform: translateY(-10px) rotate(-9deg); }
+    }
+    .fade-up{ animation: fadeUp 0.8s ease both; }
+    @keyframes fadeUp{
+       from{ opacity:0; transform: translateY(16px); }
+       to{ opacity:1; transform: translateY(0); }
+    }
+  }
+
+  a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible{
+    outline: 3px solid var(--line-coral);
+    outline-offset: 2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--kitchen-white)]/90 backdrop-blur border-b border-black/10">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="font-display font-bold text-lg tracking-tight">
+      Q<span style="color:var(--line-coral)">Courts</span>
+    </div>
+    <div class="hidden sm:flex items-center gap-8 font-mono text-xs uppercase tracking-widest text-[var(--net-black)]/70">
+      <a href="#about" class="hover:text-[var(--net-black)] transition">The Sport</a>
+      <a href="#courts" class="hover:text-[var(--net-black)] transition">The Courts</a>
+      <a href="#book" class="hover:text-[var(--net-black)] transition">Book</a>
+      <a href="#location" class="hover:text-[var(--net-black)] transition">Location</a>
+    </div>
+    <a href="#book" class="font-mono text-xs uppercase tracking-widest px-4 py-2 rounded-full btn-primary">Book a Court</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero-bg pt-32 pb-24 md:pt-40 md:pb-32 relative">
+  <div class="kitchen-line" style="top:33.33%"></div>
+  <div class="kitchen-line" style="top:66.66%"></div>
+
+  <div class="max-w-6xl mx-auto px-6 relative">
+    <div class="flex flex-col md:flex-row items-start md:items-center gap-10">
+      <div class="flex-1 fade-up">
+        <p class="font-mono uppercase tracking-[0.3em] text-xs mb-5" style="color:var(--ball-yellow)">
+          Makilala, North Cotabato
+        </p>
+        <h1 class="font-display font-bold text-[var(--kitchen-white)] text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-6">
+          Pickleball is landing on
+          <span class="paddle-underline">Molave&nbsp;Street.</span>
+        </h1>
+        <p class="text-[var(--kitchen-white)]/75 text-lg max-w-md mb-8 leading-relaxed">
+          Fun, fitness, and friendly competition — the fastest-growing sport in the world is coming to your neighborhood. Book your court time online.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="#book" class="btn-primary font-mono text-sm uppercase tracking-widest px-6 py-3.5 rounded-full">Book a Court</a>
+          <a href="#location" class="btn-outline font-mono text-sm uppercase tracking-widest px-6 py-3.5 rounded-full" style="border-color:rgba(239,243,236,0.4); color:var(--kitchen-white)">Find the Court</a>
+        </div>
+      </div>
+
+      <div class="shrink-0 float">
+        <div class="stamp w-40 h-40 md:w-48 md:h-48 font-display font-bold text-sm md:text-base">
+          BOOK<br>AHEAD
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-16 pt-8 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-6 font-mono text-[var(--kitchen-white)]/60 text-xs uppercase tracking-widest">
+      <div><span class="block text-2xl font-display font-bold" style="color:var(--ball-yellow)">1–2</span>Courts opening</div>
+      <div><span class="block text-2xl font-display font-bold" style="color:var(--ball-yellow)">Walk-in</span>+ online booking</div>
+      <div><span class="block text-2xl font-display font-bold" style="color:var(--ball-yellow)">All</span>Skill levels</div>
+      <div><span class="block text-2xl font-display font-bold" style="color:var(--ball-yellow)">Soon</span>Grand opening</div>
+    </div>
+  </div>
+</header>
+
+<!-- ABOUT / SPORT -->
+<section id="about" class="max-w-6xl mx-auto px-6 py-20 md:py-28">
+  <div class="grid md:grid-cols-2 gap-14 items-start">
+    <div>
+      <p class="font-mono uppercase tracking-[0.3em] text-xs mb-4" style="color:var(--line-coral)">New to Pickleball?</p>
+      <h2 class="font-display font-bold text-3xl md:text-4xl mb-6 leading-tight">
+        Tennis, badminton, and ping-pong walk into a court.
+      </h2>
+      <p class="text-[var(--net-black)]/70 leading-relaxed mb-4">
+        Pickleball is played with solid paddles and a perforated plastic ball on a court about a third the size of a tennis court — easy to pick up in minutes, hard to put down after your first rally.
+      </p>
+      <p class="text-[var(--net-black)]/70 leading-relaxed">
+        It's social, low-impact, and genuinely competitive at every level — which is exactly why it's become the fastest-growing sport on the planet.
+      </p>
+    </div>
+
+    <div class="grid gap-4">
+      <div class="card-line rounded-2xl p-6 bg-white/60">
+        <p class="in-badge inline-block font-mono text-xs uppercase tracking-widest px-3 py-1 rounded-full mb-3">Fun</p>
+        <p class="font-display font-bold text-lg">Easy to learn, fun from rally one.</p>
+      </div>
+      <div class="card-line rounded-2xl p-6 bg-white/60">
+        <p class="in-badge inline-block font-mono text-xs uppercase tracking-widest px-3 py-1 rounded-full mb-3">Fitness</p>
+        <p class="font-display font-bold text-lg">A full-body workout that doesn't feel like one.</p>
+      </div>
+      <div class="card-line rounded-2xl p-6 bg-white/60">
+        <p class="in-badge inline-block font-mono text-xs uppercase tracking-widest px-3 py-1 rounded-full mb-3">Community</p>
+        <p class="font-display font-bold text-lg">Friendly competition, right in Makilala.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COURTS -->
+<section id="courts" class="py-20 md:py-28" style="background:var(--net-black)">
+  <div class="max-w-6xl mx-auto px-6">
+    <p class="font-mono uppercase tracking-[0.3em] text-xs mb-4" style="color:var(--ball-yellow)">The Courts</p>
+    <h2 class="font-display font-bold text-3xl md:text-4xl mb-12 leading-tight" style="color:var(--kitchen-white)">
+      Two courts. Every skill level welcome.
+    </h2>
+
+    <div class="grid sm:grid-cols-2 gap-6">
+      <div class="rounded-2xl p-8 court-lines" style="background:var(--court-navy); border:1.5px solid rgba(239,243,236,0.15)">
+        <p class="font-mono text-xs uppercase tracking-widest mb-2" style="color:var(--ball-yellow)">Walk-in Play</p>
+        <p class="font-display font-bold text-2xl mb-3" style="color:var(--kitchen-white)">Show up, grab a paddle.</p>
+        <p class="text-sm leading-relaxed" style="color:rgba(239,243,236,0.7)">Open court time for drop-in games — no reservation needed, first come first served.</p>
+      </div>
+      <div class="rounded-2xl p-8 court-lines" style="background:var(--court-navy); border:1.5px solid rgba(239,243,236,0.15)">
+        <p class="font-mono text-xs uppercase tracking-widest mb-2" style="color:var(--ball-yellow)">Reserved Booking</p>
+        <p class="font-display font-bold text-2xl mb-3" style="color:var(--kitchen-white)">Lock in your court time.</p>
+        <p class="text-sm leading-relaxed" style="color:rgba(239,243,236,0.7)">Online booking is live — reserve your slot ahead for practices, matches, or a group session.</p>
+        <a href="#book" class="inline-block mt-4 font-mono text-xs uppercase tracking-widest px-5 py-2.5 rounded-full btn-primary">Reserve Now</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOK -->
+<section id="book" class="max-w-6xl mx-auto px-6 py-20 md:py-28">
+  <p class="font-mono uppercase tracking-[0.3em] text-xs mb-4" style="color:var(--line-coral)">Reserve a Court</p>
+  <h2 class="font-display font-bold text-3xl md:text-4xl mb-4 leading-tight">Book your slot online.</h2>
+  <p class="text-[var(--net-black)]/70 leading-relaxed mb-10 max-w-xl">Pick a court and a time. Online requests start as <span class="font-semibold">pending</span> — we'll confirm shortly so the court is locked in. (Already booked times will be rejected automatically.)</p>
+
+  <div class="grid md:grid-cols-2 gap-8">
+    <!-- form -->
+    <form id="book-form" class="card-line rounded-2xl p-6 md:p-8 bg-white/60 space-y-4" novalidate>
+      <div>
+        <label for="book-court" class="font-mono text-xs uppercase tracking-widest block mb-2" style="color:rgba(18,32,31,0.7)">Court</label>
+        <select id="book-court" name="court_id" required class="field">
+          <option value="" disabled selected>Select a court</option>
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="book-date" class="font-mono text-xs uppercase tracking-widest block mb-2" style="color:rgba(18,32,31,0.7)">Date</label>
+          <input id="book-date" type="date" name="booking_date" required class="field">
+        </div>
+        <div>
+          <label for="book-start" class="font-mono text-xs uppercase tracking-widest block mb-2" style="color:rgba(18,32,31,0.7)">Start</label>
+          <input id="book-start" type="time" name="start_time" required value="09:00" class="field">
+        </div>
+      </div>
+      <div>
+        <label for="book-end" class="font-mono text-xs uppercase tracking-widest block mb-2" style="color:rgba(18,32,31,0.7)">End</label>
+        <input id="book-end" type="time" name="end_time" required value="10:00" class="field">
+      </div>
+      <div>
+        <label for="book-name" class="font-mono text-xs uppercase tracking-widest block mb-2" style="color:rgba(18,32,31,0.7)">Full name</label>
+        <input id="book-name" type="text" name="customer_name" required placeholder="Juan Dela Cruz" autocomplete="name" class="field">
+      </div>
+      <div>
+        <label for="book-phone" class="font-mono text-xs uppercase tracking-widest block mb-2" style="color:rgba(18,32,31,0.7)">Phone</label>
+        <input id="book-phone" type="tel" name="customer_phone" required placeholder="09171234567" autocomplete="tel" pattern="[0-9+\-\s()]{7,20}" class="field">
+      </div>
+      <button type="submit" id="book-submit" class="btn-primary w-full font-mono text-sm uppercase tracking-widest px-6 py-3.5 rounded-full">Request Booking</button>
+      <p id="book-status" class="mt-2 font-mono text-xs uppercase tracking-widest min-h-[1.2em]" aria-live="polite"></p>
+    </form>
+
+    <!-- availability -->
+    <div class="rounded-2xl p-6 md:p-8 court-lines" style="background:var(--court-navy); border:1.5px solid rgba(239,243,236,0.15)">
+      <p class="font-mono text-xs uppercase tracking-widest mb-4" style="color:var(--ball-yellow)">Reserved Times</p>
+      <p class="text-sm mb-4" style="color:rgba(239,243,236,0.7)">Pick a court and date to see what's already taken.</p>
+      <ul id="availability" class="space-y-1" style="color:var(--kitchen-white)"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section id="location" class="max-w-6xl mx-auto px-6 py-20 md:py-28">
+  <div class="grid md:grid-cols-2 gap-14 items-center">
+    <div>
+      <p class="font-mono uppercase tracking-[0.3em] text-xs mb-4" style="color:var(--line-coral)">Find Us</p>
+      <h2 class="font-display font-bold text-3xl md:text-4xl mb-6 leading-tight">
+        Molave Street,<br>Barangay Poblacion.
+      </h2>
+      <p class="text-[var(--net-black)]/70 leading-relaxed mb-2">
+        Beside Victory Christian Schoolhouse — right in front of RHU Makilala.
+      </p>
+      <p class="font-mono text-sm text-[var(--net-black)]/50 mb-8">Makilala, North Cotabato, Philippines</p>
+      <a href="https://www.google.com/maps/search/?api=1&query=Molave+Street+Barangay+Poblacion+Makilala+North+Cotabato" target="_blank" rel="noopener" class="btn-outline font-mono text-sm uppercase tracking-widest px-6 py-3.5 rounded-full inline-block">Open in Maps</a>
+    </div>
+    <div class="rounded-2xl overflow-hidden card-line h-72 md:h-96">
+      <iframe
+        title="QCourts Pickleball location map"
+        width="100%" height="100%" style="border:0; filter:grayscale(0.15);"
+        loading="lazy"
+        src="https://www.google.com/maps?q=Molave+Street+Barangay+Poblacion+Makilala+North+Cotabato&output=embed">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- NOTIFY -->
+<section id="notify" class="hero-bg py-20 md:py-28 relative">
+  <div class="max-w-2xl mx-auto px-6 text-center relative">
+    <p class="font-mono uppercase tracking-[0.3em] text-xs mb-4" style="color:var(--ball-yellow)">Be First on Court</p>
+    <h2 class="font-display font-bold text-3xl md:text-4xl mb-4" style="color:var(--kitchen-white)">
+      Get the grand opening date first.
+    </h2>
+    <p class="mb-10" style="color:rgba(239,243,236,0.7)">
+      Leave your name and number — we'll message you the moment courts open for booking.
+    </p>
+
+    <form id="notify-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+      <label for="notify-name" class="sr-only">Full name</label>
+      <input id="notify-name" required type="text" placeholder="Full name" autocomplete="name" class="flex-1 rounded-full px-5 py-3.5 font-mono text-sm bg-[var(--kitchen-white)] text-[var(--net-black)] placeholder:text-[var(--net-black)]/40 focus:outline-none">
+      <label for="notify-phone" class="sr-only">Phone number</label>
+      <input id="notify-phone" required type="tel" placeholder="Phone number" autocomplete="tel" class="flex-1 rounded-full px-5 py-3.5 font-mono text-sm bg-[var(--kitchen-white)] text-[var(--net-black)] placeholder:text-[var(--net-black)]/40 focus:outline-none">
+      <button type="submit" class="btn-primary font-mono text-sm uppercase tracking-widest px-6 py-3.5 rounded-full whitespace-nowrap">Notify Me</button>
+    </form>
+    <p id="notify-success" class="hidden mt-4 font-mono text-xs uppercase tracking-widest" style="color:var(--ball-yellow)">Got it — see you on the court soon.</p>
+    <p class="mt-4 font-mono text-[10px] text-[var(--kitchen-white)]/40">This form doesn't send data yet — hook it up to the booking backend once it's live.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="border-t border-black/10 py-10">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="font-display font-bold">Q<span style="color:var(--line-coral)">Courts</span> Pickleball</div>
+    <p class="font-mono text-xs text-[var(--net-black)]/50 text-center">Molave St., Brgy. Poblacion, Makilala, North Cotabato</p>
+  </div>
+</footer>
+
+<script>
+  const API = 'http://localhost:8000/api';
+  let bookingSubmitting = false;
+
+  async function api(path, opts) {
+    try {
+      const res = await fetch(API + path, {
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        ...opts
+      });
+      let data = null;
+      try { data = await res.json(); } catch (e) { /* no body */ }
+      return { res, data };
+    } catch (err) {
+      throw { message: 'Network error. Please check your connection and try again.' };
+    }
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, m => (
+      { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[m]
+    ));
+  }
+
+  function setStatus(msg, color) {
+    const el = document.getElementById('book-status');
+    el.textContent = msg;
+    el.style.color = color || 'inherit';
+  }
+
+  async function loadCourts() {
+    const sel = document.getElementById('book-court');
+    try {
+      const { data } = await api('/courts');
+      const courts = data || [];
+      sel.innerHTML = '<option value="" disabled selected>Select a court</option>' +
+        courts.map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
+    } catch (err) {
+      setStatus(err.message || 'Failed to load courts.', 'var(--line-coral)');
+    }
+  }
+
+  async function loadAvailability() {
+    const courtId = document.getElementById('book-court').value;
+    const date = document.getElementById('book-date').value;
+    const list = document.getElementById('availability');
+    if (!courtId || !date) { list.innerHTML = ''; return; }
+    try {
+      const { data } = await api(`/bookings?date=${encodeURIComponent(date)}&court_id=${courtId}`);
+      const bookings = data || [];
+      if (!bookings.length) {
+        list.innerHTML = `<li class="text-sm" style="color:var(--dink-green)">No bookings yet for this date — wide open!</li>`;
+        return;
+      }
+      list.innerHTML = bookings.map(b => `
+        <li class="flex items-center justify-between py-2 border-b border-white/10">
+          <span class="font-mono">${b.start_time}–${b.end_time}</span>
+          <span class="font-mono text-xs uppercase tracking-widest" style="color:var(--ball-yellow)">${escapeHtml(b.status)}</span>
+        </li>`).join('');
+    } catch (err) {
+      list.innerHTML = `<li class="text-sm" style="color:var(--line-coral)">${escapeHtml(err.message || 'Failed to load availability.')}</li>`;
+    }
+  }
+
+  async function submitBooking(e) {
+    e.preventDefault();
+    if (bookingSubmitting) return;
+
+    const form = e.target;
+    const courtId = document.getElementById('book-court').value;
+    const date = document.getElementById('book-date').value;
+    const name = document.getElementById('book-name').value.trim();
+    const phone = document.getElementById('book-phone').value.trim();
+    const start = document.getElementById('book-start').value;
+    const end = document.getElementById('book-end').value;
+
+    if (!courtId) { setStatus('Please select a court.', 'var(--line-coral)'); return; }
+    if (!date) { setStatus('Please select a date.', 'var(--line-coral)'); return; }
+    if (!name) { setStatus('Please enter your full name.', 'var(--line-coral)'); return; }
+    if (!phone) { setStatus('Please enter your phone number.', 'var(--line-coral)'); return; }
+    if (!/^[0-9+\-\s()]{7,20}$/.test(phone)) {
+      setStatus('Please enter a valid phone number.', 'var(--line-coral)');
+      return;
+    }
+    if (start >= end) {
+      setStatus('End time must be after start time.', 'var(--line-coral)');
+      return;
+    }
+
+    bookingSubmitting = true;
+    const btn = document.getElementById('book-submit');
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Requesting…';
+    setStatus('Sending…', 'var(--ball-yellow)');
+
+    const payload = {
+      court_id: courtId,
+      customer_name: name,
+      customer_phone: phone,
+      booking_date: date,
+      start_time: start,
+      end_time: end,
+      source: 'online'
+    };
+
+    try {
+      const { res, data } = await api('/bookings', { method: 'POST', body: JSON.stringify(payload) });
+
+      if (res.ok) {
+        if (data.status === 'pending') {
+          setStatus("Booking request received! We'll confirm it shortly.", 'var(--dink-green)');
+        } else {
+          setStatus("You're booked!", 'var(--dink-green)');
+        }
+        form.reset();
+        document.getElementById('book-date').value = new Date().toISOString().split('T')[0];
+        document.getElementById('book-start').value = '09:00';
+        document.getElementById('book-end').value = '10:00';
+        await loadAvailability();
+      } else if (res.status === 409) {
+        setStatus('That time slot is already taken — please choose another.', 'var(--line-coral)');
+      } else if (res.status === 422 && data && data.errors) {
+        setStatus(Object.values(data.errors).flat().join(' '), 'var(--line-coral)');
+      } else {
+        setStatus((data && data.message) || 'Something went wrong. Please try again.', 'var(--line-coral)');
+      }
+    } catch (err) {
+      setStatus(err.message || 'Something went wrong. Please try again.', 'var(--line-coral)');
+    } finally {
+      bookingSubmitting = false;
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
+  }
+
+  function handleNotifySubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    form.reset();
+    document.getElementById('notify-success').classList.remove('hidden');
+    setTimeout(() => {
+      document.getElementById('notify-success').classList.add('hidden');
+    }, 5000);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const dateInput = document.getElementById('book-date');
+    dateInput.value = new Date().toISOString().split('T')[0];
+
+    loadCourts();
+    document.getElementById('book-court').addEventListener('change', loadAvailability);
+    document.getElementById('book-date').addEventListener('change', loadAvailability);
+    document.getElementById('book-form').addEventListener('submit', submitBooking);
+    document.getElementById('notify-form').addEventListener('submit', handleNotifySubmit);
+  });
+</script>
+
+</body>
+</html>

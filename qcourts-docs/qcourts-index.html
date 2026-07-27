@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCourts Pickleball — Coming Soon to Makilala</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{
+    --court-navy:#0A3A52;
+    --court-navy-deep:#062737;
+    --kitchen-white:#FAF7EF;
+    --ball-yellow:#D9F04B;
+    --net-black:#12201F;
+    --line-coral:#FF5C4D;
+    --dink-green:#3FA66B;
+    --line-white:#EFF3EC;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--kitchen-white);
+    color:var(--net-black);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+  }
+  .font-display{font-family:'Space Grotesk',sans-serif;}
+  .font-mono{font-family:'Space Mono',monospace;}
+
+  /* Court line texture */
+  .court-lines{
+    background-image:
+      linear-gradient(var(--line-white) 2px, transparent 2px),
+      linear-gradient(90deg, var(--line-white) 2px, transparent 2px);
+    background-size: 100% 100%, 100% 100%;
+  }
+
+  .hero-bg{
+    background: radial-gradient(circle at 20% 20%, rgba(217,240,75,0.08), transparent 45%),
+                linear-gradient(180deg, var(--court-navy) 0%, var(--court-navy-deep) 100%);
+    position:relative;
+  }
+  .hero-bg::before{
+    content:'';
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(239,243,236,0.14) 1.5px, transparent 1.5px),
+      linear-gradient(90deg, rgba(239,243,236,0.14) 1.5px, transparent 1.5px);
+    background-size: 100% 33.33%, 25% 100%;
+    background-position: 0 0;
+    pointer-events:none;
+    opacity:0.6;
+  }
+  .kitchen-line{
+    position:absolute;
+    left:0; right:0;
+    height:2px;
+    background:rgba(239,243,236,0.35);
+  }
+
+  /* Stamp badge */
+  .stamp{
+    border:3px solid var(--ball-yellow);
+    color:var(--ball-yellow);
+    border-radius:9999px;
+    transform: rotate(-9deg);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    letter-spacing:0.14em;
+  }
+
+  .paddle-underline{
+    position:relative;
+    display:inline-block;
+  }
+  .paddle-underline::after{
+    content:'';
+    position:absolute;
+    left:0; right:0; bottom:-0.08em;
+    height:0.16em;
+    background:var(--line-coral);
+    border-radius:2px;
+  }
+
+  .card-line{
+    border:1.5px solid rgba(18,32,31,0.12);
+  }
+
+  .btn-primary{
+    background:var(--line-coral);
+    color:var(--kitchen-white);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn-primary:hover{ transform: translateY(-2px); box-shadow: 0 10px 24px -8px rgba(255,92,77,0.55); }
+
+  .btn-outline{
+    border:2px solid var(--net-black);
+    color:var(--net-black);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .btn-outline:hover{ background:var(--net-black); color:var(--kitchen-white); }
+
+  .in-badge{
+    background:var(--dink-green);
+    color:var(--kitchen-white);
+  }
+
+  @media (prefers-reduced-motion: no-preference){
+    .float{ animation: floaty 6s ease-in-out infinite; }
+    @keyframes floaty{
+      0%,100%{ transform: translateY(0) rotate(-9deg); }
+      50%{ transform: translateY(-10px) rotate(-9deg); }
+    }
+    .fade-up{ animation: fadeUp 0.8s ease both; }
+    @keyframes fadeUp{
+      from{ opacity:0; transform: translateY(16px); }
+      to{ opacity:1; transform: translateY(0); }
+    }
+  }
+
+  a:focus-visible, button:focus-visible{
+    outline: 3px solid var(--line-coral);
+    outline-offset: 2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--kitchen-white)]/90 backdrop-blur border-b border-black/10">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="font-display font-bold text-lg tracking-tight">
+      Q<span style="color:var(--line-coral)">Courts</span>
+    </div>
+    <div class="hidden sm:flex items-center gap-8 font-mono text-xs uppercase tracking-widest text-[var(--net-black)]/70">
+      <a href="#about" class="hover:text-[var(--net-black)] transition">The Sport</a>
+      <a href="#courts" class="hover:text-[var(--net-black)] transition">The Courts</a>
+      <a href="#location" class="hover:text-[var(--net-black)] transition">Location</a>
+    </div>
+    <a href="#notify" class="font-mono text-xs uppercase tracking-widest px-4 py-2 rounded-full btn-primary">Get Notified</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero-bg pt-32 pb-24 md:pt-40 md:pb-32 relative">
+  <div class="kitchen-line" style="top:33.33%"></div>
+  <div class="kitchen-line" style="top:66.66%"></div>
+
+  <div class="max-w-6xl mx-auto px-6 relative">
+    <div class="flex flex-col md:flex-row items-start md:items-center gap-10">
+      <div class="flex-1 fade-up">
+        <p class="font-mono uppercase tracking-[0.3em] text-xs mb-5" style="color:var(--ball-yellow)">
+          Makilala, North Cotabato
+        </p>
+        <h1 class="font-display font-bold text-[var(--kitchen-white)] text-4xl sm:text-5xl md:text-6xl leading-[1.05] mb-6">
+          Pickleball is landing on
+          <span class="paddle-underline">Molave&nbsp;Street.</span>
+        </h1>
+        <p class="text-[var(--kitchen-white)]/75 text-lg max-w-md mb-8 leading-relaxed">
+          Fun, fitness, and friendly competition — the fastest-growing sport in the world is coming to your neighborhood. First serve drops soon.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="#notify" class="btn-primary font-mono text-sm uppercase tracking-widest px-6 py-3.5 rounded-full">Notify Me at Opening</a>
+          <a href="#location" class="btn-outline font-mono text-sm uppercase tracking-widest px-6 py-3.5 rounded-full" style="border-color:rgba(239,243,236,0.4); color:var(--kitchen-white)">Find the Court</a>
+        </div>
+      </div>
+
+      <div class="shrink-0 float">
+        <div class="stamp w-40 h-40 md:w-48 md:h-48 font-display font-bold text-sm md:text-base">
+          COMING<br>SOON
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-16 pt-8 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-6 font-mono text-[var(--kitchen-white)]/60 text-xs uppercase tracking-widest">
+      <div><span class="block text-2xl font-display font-bold" style="color:var(--ball-yellow)">1–2</span>Courts opening</div>
+      <div><span class="block text-2xl font-display font-bold" style="color:var(--ball-yellow)">Walk-in</span>+ online booking</div>
+      <div><span class="block text-2xl font-display font-bold" style="color:var(--ball-yellow)">All</span>Skill levels</div>
+      <div><span class="block text-2xl font-display font-bold" style="color:var(--ball-yellow)">Soon</span>Grand opening</div>
+    </div>
+  </div>
+</header>
+
+<!-- ABOUT / SPORT -->
+<section id="about" class="max-w-6xl mx-auto px-6 py-20 md:py-28">
+  <div class="grid md:grid-cols-2 gap-14 items-start">
+    <div>
+      <p class="font-mono uppercase tracking-[0.3em] text-xs mb-4" style="color:var(--line-coral)">New to Pickleball?</p>
+      <h2 class="font-display font-bold text-3xl md:text-4xl mb-6 leading-tight">
+        Tennis, badminton, and ping-pong walk into a court.
+      </h2>
+      <p class="text-[var(--net-black)]/70 leading-relaxed mb-4">
+        Pickleball is played with solid paddles and a perforated plastic ball on a court about a third the size of a tennis court — easy to pick up in minutes, hard to put down after your first rally.
+      </p>
+      <p class="text-[var(--net-black)]/70 leading-relaxed">
+        It's social, low-impact, and genuinely competitive at every level — which is exactly why it's become the fastest-growing sport on the planet.
+      </p>
+    </div>
+
+    <div class="grid gap-4">
+      <div class="card-line rounded-2xl p-6 bg-white/60">
+        <p class="in-badge inline-block font-mono text-xs uppercase tracking-widest px-3 py-1 rounded-full mb-3">Fun</p>
+        <p class="font-display font-bold text-lg">Easy to learn, fun from rally one.</p>
+      </div>
+      <div class="card-line rounded-2xl p-6 bg-white/60">
+        <p class="in-badge inline-block font-mono text-xs uppercase tracking-widest px-3 py-1 rounded-full mb-3">Fitness</p>
+        <p class="font-display font-bold text-lg">A full-body workout that doesn't feel like one.</p>
+      </div>
+      <div class="card-line rounded-2xl p-6 bg-white/60">
+        <p class="in-badge inline-block font-mono text-xs uppercase tracking-widest px-3 py-1 rounded-full mb-3">Community</p>
+        <p class="font-display font-bold text-lg">Friendly competition, right in Makilala.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COURTS -->
+<section id="courts" class="py-20 md:py-28" style="background:var(--net-black)">
+  <div class="max-w-6xl mx-auto px-6">
+    <p class="font-mono uppercase tracking-[0.3em] text-xs mb-4" style="color:var(--ball-yellow)">The Courts</p>
+    <h2 class="font-display font-bold text-3xl md:text-4xl mb-12 leading-tight" style="color:var(--kitchen-white)">
+      Two courts. Every skill level welcome.
+    </h2>
+
+    <div class="grid sm:grid-cols-2 gap-6">
+      <div class="rounded-2xl p-8 court-lines" style="background:var(--court-navy); border:1.5px solid rgba(239,243,236,0.15)">
+        <p class="font-mono text-xs uppercase tracking-widest mb-2" style="color:var(--ball-yellow)">Walk-in Play</p>
+        <p class="font-display font-bold text-2xl mb-3" style="color:var(--kitchen-white)">Show up, grab a paddle.</p>
+        <p class="text-sm leading-relaxed" style="color:rgba(239,243,236,0.7)">Open court time for drop-in games — no reservation needed, first come first served.</p>
+      </div>
+      <div class="rounded-2xl p-8 court-lines" style="background:var(--court-navy); border:1.5px solid rgba(239,243,236,0.15)">
+        <p class="font-mono text-xs uppercase tracking-widest mb-2" style="color:var(--ball-yellow)">Reserved Booking</p>
+        <p class="font-display font-bold text-2xl mb-3" style="color:var(--kitchen-white)">Lock in your court time.</p>
+        <p class="text-sm leading-relaxed" style="color:rgba(239,243,236,0.7)">Online booking is on the way — reserve your slot ahead for practices, matches, or a group session.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section id="location" class="max-w-6xl mx-auto px-6 py-20 md:py-28">
+  <div class="grid md:grid-cols-2 gap-14 items-center">
+    <div>
+      <p class="font-mono uppercase tracking-[0.3em] text-xs mb-4" style="color:var(--line-coral)">Find Us</p>
+      <h2 class="font-display font-bold text-3xl md:text-4xl mb-6 leading-tight">
+        Molave Street,<br>Barangay Poblacion.
+      </h2>
+      <p class="text-[var(--net-black)]/70 leading-relaxed mb-2">
+        Beside Victory Christian Schoolhouse — right in front of RHU Makilala.
+      </p>
+      <p class="font-mono text-sm text-[var(--net-black)]/50 mb-8">Makilala, North Cotabato, Philippines</p>
+      <a href="https://www.google.com/maps/search/?api=1&query=Molave+Street+Barangay+Poblacion+Makilala+North+Cotabato" target="_blank" rel="noopener" class="btn-outline font-mono text-sm uppercase tracking-widest px-6 py-3.5 rounded-full inline-block">Open in Maps</a>
+    </div>
+    <div class="rounded-2xl overflow-hidden card-line h-72 md:h-96">
+      <iframe
+        title="QCourts Pickleball location map"
+        width="100%" height="100%" style="border:0; filter:grayscale(0.15);"
+        loading="lazy"
+        src="https://www.google.com/maps?q=Molave+Street+Barangay+Poblacion+Makilala+North+Cotabato&output=embed">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- NOTIFY -->
+<section id="notify" class="hero-bg py-20 md:py-28 relative">
+  <div class="max-w-2xl mx-auto px-6 text-center relative">
+    <p class="font-mono uppercase tracking-[0.3em] text-xs mb-4" style="color:var(--ball-yellow)">Be First on Court</p>
+    <h2 class="font-display font-bold text-3xl md:text-4xl mb-4" style="color:var(--kitchen-white)">
+      Get the grand opening date first.
+    </h2>
+    <p class="mb-10" style="color:rgba(239,243,236,0.7)">
+      Leave your name and number — we'll message you the moment courts open for booking.
+    </p>
+
+    <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="event.preventDefault(); this.reset(); document.getElementById('notify-success').classList.remove('hidden');">
+      <label for="notify-name" class="sr-only">Full name</label>
+      <input id="notify-name" required type="text" placeholder="Full name" class="flex-1 rounded-full px-5 py-3.5 font-mono text-sm bg-[var(--kitchen-white)] text-[var(--net-black)] placeholder:text-[var(--net-black)]/40 focus:outline-none">
+      <label for="notify-phone" class="sr-only">Phone number</label>
+      <input id="notify-phone" required type="tel" placeholder="Phone number" class="flex-1 rounded-full px-5 py-3.5 font-mono text-sm bg-[var(--kitchen-white)] text-[var(--net-black)] placeholder:text-[var(--net-black)]/40 focus:outline-none">
+      <button type="submit" class="btn-primary font-mono text-sm uppercase tracking-widest px-6 py-3.5 rounded-full whitespace-nowrap">Notify Me</button>
+    </form>
+    <p id="notify-success" class="hidden mt-4 font-mono text-xs uppercase tracking-widest" style="color:var(--ball-yellow)">Got it — see you on the court soon.</p>
+    <p class="mt-4 font-mono text-[10px] text-[var(--kitchen-white)]/40">This form doesn't send data yet — hook it up to the booking backend once it's live.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="border-t border-black/10 py-10">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="font-display font-bold">Q<span style="color:var(--line-coral)">Courts</span> Pickleball</div>
+    <p class="font-mono text-xs text-[var(--net-black)]/50 text-center">Molave St., Brgy. Poblacion, Makilala, North Cotabato</p>
+  </div>
+</footer>
+
+</body>
+</html>

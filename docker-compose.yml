@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:17
+    container_name: qcourts-db
+    environment:
+      POSTGRES_DB: qcourts
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Kashitekuto09
+    volumes:
+      - qcourts_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d qcourts"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    container_name: qcourts-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: qcourts
+      DB_USERNAME: postgres
+      DB_PASSWORD: Kashitekuto09
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www
+    working_dir: /var/www
+    command: sh -c "php artisan migrate --force && php artisan db:seed --class=CourtSeeder --force && php artisan serve --host=0.0.0.0 --port=8000"
+
+volumes:
+  qcourts_pgdata:
